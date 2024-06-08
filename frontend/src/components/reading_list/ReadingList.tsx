@@ -1,10 +1,12 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Typography } from "@mui/material";
+import { AlertProps, Box, Button, Card, CardActions, CardContent, CardMedia, Chip, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { BookTypes } from "../../resource/books.types";
 import { fetchBooksFromLocaStorage, removeBookFromLocalStorage } from "../../utils/utils";
+import AppSnackBar from "../shared/app_snackbar/AppSnackBar";
 
 function ReadingList() {
     const [readingList, setReadingList] = useState<Array<BookTypes>>([]);
+    const [sbMessage, setSbMessage] = useState({ open: false, message: '', severity: 'success' });
 
     useEffect(() => {
         handleFetchReadingList();
@@ -19,10 +21,12 @@ function ReadingList() {
 
     const handleRemove = (book: BookTypes) => {
         let resp = removeBookFromLocalStorage(book);
+        setSbMessage({ open: true, ...resp });
         handleFetchReadingList();
     }
 
     return (<>
+        <AppSnackBar open={sbMessage.open} message={sbMessage.message} severity={sbMessage.severity as AlertProps["severity"]} />
         <Box>
             <Typography variant="h4">
                 Reading List

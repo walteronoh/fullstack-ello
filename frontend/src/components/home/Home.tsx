@@ -1,27 +1,32 @@
-import { Autocomplete, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Chip, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import { AlertProps, Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, Chip, CircularProgress, Grid, TextField, Typography } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { BooksQuery } from "../../resource/books.resource";
 import { BookQueryTypes, BookTypes } from "../../resource/books.types";
 import { addBookToLocalStorage } from "../../utils/utils";
+import { useState } from "react";
+import AppSnackBar from "../shared/app_snackbar/AppSnackBar";
 
 function Home() {
     const { loading, data } = useQuery<BookQueryTypes>(BooksQuery);
+    const [sbMessage, setSbMessage] = useState({ open: false, message: '', severity: 'success' });
 
     const handleAddBookToReadingList = (book: BookTypes) => {
         const resp = addBookToLocalStorage(book);
-        alert(resp);
+        setSbMessage({ open: true, ...resp });
     };
+
 
     if (loading) return <Box sx={{ display: 'flex' }}>
         <CircularProgress />
     </Box>
 
     return (<>
+        <AppSnackBar open={sbMessage.open} message={sbMessage.message} severity={sbMessage.severity as AlertProps["severity"]} />
         <Box>
             <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center' }}>
                 <Grid item xs={12} sm={12} md={5}>
                     <Autocomplete sx={{ width: '100%' }} options={data?.books ?? []} disableCloseOnSelect getOptionLabel={(book) => book.title} renderOption={(props, option) => (
-                        <Box key={option.title} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                             <img
                                 loading="lazy"
                                 width="70"
