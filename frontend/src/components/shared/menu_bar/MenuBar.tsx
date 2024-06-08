@@ -54,7 +54,7 @@ export default function MenuBar() {
                 <Tabs value={value} onChange={handleChange} aria-label="App Tabs">
                     {
                         tabElements.map((v, i) => (
-                            <Tab label={v.label} {...a11yProps(i)} />
+                            <Tab key={i} label={v.label} {...a11yProps(i)} />
                         ))
                     }
                 </Tabs>
