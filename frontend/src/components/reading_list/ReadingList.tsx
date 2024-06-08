@@ -14,9 +14,7 @@ function ReadingList() {
 
     const handleFetchReadingList = () => {
         let storedBooks = fetchBooksFromLocaStorage();
-        if (storedBooks.length > 0) {
-            setReadingList(storedBooks);
-        }
+        setReadingList(storedBooks);
     }
 
     const handleRemove = (book: BookTypes) => {
@@ -25,52 +23,53 @@ function ReadingList() {
         handleFetchReadingList();
     }
 
-    return (<>
+    return (<Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center' }}>
         <AppSnackBar open={sbMessage.open} message={sbMessage.message} severity={sbMessage.severity as AlertProps["severity"]} />
-        <Box>
-            <Typography variant="h4">
-                Reading List
-            </Typography>
+        <Grid item xs={12} sm={12} md={8}>
             <Box>
-                {
-                    readingList.length > 0 ?
-                        <Grid container spacing={2}>
-                            {
-                                readingList?.map((book, i) => (
-                                    <Grid key={i} item xs={6} md={2}>
-                                        <Card>
-                                            <CardMedia
-                                                sx={{ height: 240 }}
-                                                image={`${book.coverPhotoURL}`}
-                                                title='Book Image'
-                                            />
-                                            <CardContent>
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {book.title}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    {book.author}
-                                                </Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button size="small">Share</Button>
-                                                <Button size="small" onClick={() => handleRemove(book)}>Remove</Button>
-                                            </CardActions>
-                                        </Card>
-                                    </Grid>
-                                ))
-                            }
-                        </Grid>
-                        : <Box sx={{ position: 'relative', width: '100%', textAlign: 'center', padding: '30px' }}>
-                            <Typography variant="h5" color="text.secondary">
-                                It seems like you do not have any book(s) in your reading list.
-                            </Typography>
-                            <Chip label="Search from Books" sx={{ backgroundColor: '#5ACCCC', color: 'white' }} />
-                        </Box>
-                }
+                <Typography variant="h4" sx={{ color: '#335C6E' }}>
+                    Reading List
+                </Typography>
+                <Box>
+                    {
+                        readingList.length > 0 ?
+                            <Grid container spacing={2}>
+                                {
+                                    readingList?.map((book, i) => (
+                                        <Grid key={i} item xs={6} md={2}>
+                                            <Card>
+                                                <CardMedia
+                                                    sx={{ height: 240 }}
+                                                    image={`${book.coverPhotoURL}`}
+                                                    title='Book Image'
+                                                />
+                                                <CardContent>
+                                                    <Typography gutterBottom variant="body1" component="div">
+                                                        {book.title}
+                                                    </Typography>
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        {book.author}
+                                                    </Typography>
+                                                </CardContent>
+                                                <CardActions>
+                                                    <Chip label="Remove" sx={{ backgroundColor: '#F76434', color: 'white' }} onClick={() => handleRemove(book)} />
+                                                </CardActions>
+                                            </Card>
+                                        </Grid>
+                                    ))
+                                }
+                            </Grid>
+                            : <Box sx={{ position: 'relative', width: '100%', textAlign: 'center', padding: '30px' }}>
+                                <Typography variant="h5" color="text.secondary">
+                                    It seems like you do not have any book(s) in your reading list.
+                                </Typography>
+                                <Chip label="Search from Books" sx={{ backgroundColor: '#5ACCCC', color: 'white' }} />
+                            </Box>
+                    }
+                </Box>
             </Box>
-        </Box>
-    </>);
+        </Grid>
+    </Grid>);
 }
 
 export default ReadingList;

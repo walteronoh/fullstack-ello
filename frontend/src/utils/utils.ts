@@ -33,13 +33,17 @@ const addBookToLocalStorage = (book: BookTypes) => {
 }
 
 const fetchBooksFromLocaStorage = () => {
-    let lclData = window.localStorage.getItem("reading_list");
-    if (lclData) {
-        let parsedData = JSON.parse(lclData);
-        let books: Array<BookTypes> = parsedData;
-        return books;
+    try {
+        let lclData = window.localStorage.getItem("reading_list");
+        if (lclData) {
+            let parsedData = JSON.parse(lclData);
+            let books: Array<BookTypes> = parsedData;
+            return books;
+        }
+        return [];
+    } catch (err) {
+        return [];
     }
-    return [];
 }
 
 const removeBookFromLocalStorage = (book: BookTypes) => {
