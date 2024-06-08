@@ -1,7 +1,6 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, TextField, Typography } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { BooksQuery } from "../../resource/books.resource";
-import { useEffect } from "react";
 import { BookQueryTypes } from "../../resource/books.types";
 
 function Home() {
@@ -13,20 +12,41 @@ function Home() {
 
     return (<>
         <Box>
-            <TextField id="outlined-basic" label="Search for Books" variant="outlined" />
+            <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
+                <Grid item xs={10} md={7}>
+                    <Autocomplete sx={{ width: '100%' }} options={data?.books ?? []} getOptionLabel={(book) => book.title} renderOption={(props, option) => (
+                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                            <img
+                                loading="lazy"
+                                width="100"
+                                src={`${option.coverPhotoURL}`}
+                                alt=""
+                            />
+                            <Box>
+                                <Typography gutterBottom variant="h6" component="div">
+                                    {option.title}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    by {option.author}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    )} renderInput={(params) => <TextField {...params} label="Books" variant="outlined" />} />
+                </Grid>
+            </Grid>
         </Box>
         <Box>
             <Typography variant="h4">
                 All Books
             </Typography>
             <Box>
-                <Grid container spacing={5}>
+                <Grid container spacing={2}>
                     {
                         data?.books.map((book, i) => (
-                            <Grid key={i} item xs={6} md={3}>
+                            <Grid key={i} item xs={6} md={2}>
                                 <Card>
                                     <CardMedia
-                                        sx={{ height: 140 }}
+                                        sx={{ height: 240 }}
                                         image={`${book.coverPhotoURL}`}
                                         title='Book Image'
                                     />

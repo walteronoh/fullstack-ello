@@ -1,8 +1,8 @@
 interface BookTypes {
-    title: String
-    author: String
-    coverPhotoURL: String
-    readingLevel: String
+    title: string
+    author: string
+    coverPhotoURL: string
+    readingLevel: string
 }
 
 interface BookQueryTypes {
