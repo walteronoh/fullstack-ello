@@ -1,10 +1,16 @@
-import { Autocomplete, Box, Button, Card, CardActions, CardContent, CardMedia, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import { Autocomplete, Avatar, Box, Button, Card, CardActions, CardContent, CardMedia, Chip, CircularProgress, Grid, TextField, Typography } from "@mui/material";
 import { useQuery } from "@apollo/client";
 import { BooksQuery } from "../../resource/books.resource";
-import { BookQueryTypes } from "../../resource/books.types";
+import { BookQueryTypes, BookTypes } from "../../resource/books.types";
+import { addBookToLocalStorage } from "../../utils/utils";
 
 function Home() {
     const { loading, data } = useQuery<BookQueryTypes>(BooksQuery);
+
+    const handleAddBookToReadingList = (book: BookTypes) => {
+        const resp = addBookToLocalStorage(book);
+        alert(resp);
+    };
 
     if (loading) return <Box sx={{ display: 'flex' }}>
         <CircularProgress />
@@ -12,23 +18,26 @@ function Home() {
 
     return (<>
         <Box>
-            <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center', padding: '30px' }}>
-                <Grid item xs={10} md={7}>
-                    <Autocomplete sx={{ width: '100%' }} options={data?.books ?? []} getOptionLabel={(book) => book.title} renderOption={(props, option) => (
-                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+            <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Grid item xs={12} sm={12} md={5}>
+                    <Autocomplete sx={{ width: '100%' }} options={data?.books ?? []} disableCloseOnSelect getOptionLabel={(book) => book.title} renderOption={(props, option) => (
+                        <Box key={option.title} component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
                             <img
                                 loading="lazy"
-                                width="100"
+                                width="70"
                                 src={`${option.coverPhotoURL}`}
                                 alt=""
                             />
                             <Box>
-                                <Typography gutterBottom variant="h6" component="div">
+                                <Typography gutterBottom variant="body1" component="div">
                                     {option.title}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    by {option.author}
+                                    {option.author}
                                 </Typography>
+                                <Box sx={{ padding: '10px' }}>
+                                    <Chip label="Add to Reading List" sx={{ backgroundColor: '#5ACCCC', color: 'white' }} onClick={() => handleAddBookToReadingList(option)} />
+                                </Box>
                             </Box>
                         </Box>
                     )} renderInput={(params) => <TextField {...params} label="Books" variant="outlined" />} />
@@ -55,7 +64,7 @@ function Home() {
                                             {book.title}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary">
-                                            by {book.author}
+                                            {book.author}
                                         </Typography>
                                     </CardContent>
                                     <CardActions>

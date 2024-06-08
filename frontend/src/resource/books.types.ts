@@ -9,4 +9,4 @@ interface BookQueryTypes {
     books: Array<BookTypes>
 }
 
-export type { BookQueryTypes }
+export type { BookQueryTypes, BookTypes }
