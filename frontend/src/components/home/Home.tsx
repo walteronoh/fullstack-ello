@@ -52,14 +52,14 @@ function Home() {
             </Box>
 
             <Box>
-                <Typography variant="h4" sx={{ color: '#335C6E' }}>
+                <Typography variant="h4" sx={{ color: '#335C6E'}}>
                     All Books
                 </Typography>
                 <Box>
                     <Grid container spacing={2}>
                         {
                             data?.books.map((book, i) => (
-                                <Grid key={i} item xs={6} md={2}>
+                                <Grid key={i} item xs={6} sm={4} md={3}>
                                     <Card>
                                         <CardMedia
                                             sx={{ height: 240 }}

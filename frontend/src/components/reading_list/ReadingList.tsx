@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { BookTypes } from "../../resource/books.types";
 import { fetchBooksFromLocaStorage, removeBookFromLocalStorage } from "../../utils/utils";
 import AppSnackBar from "../shared/app_snackbar/AppSnackBar";
+import { useNavigate } from "react-router-dom";
 
 function ReadingList() {
+    const navigate = useNavigate();
     const [readingList, setReadingList] = useState<Array<BookTypes>>([]);
     const [sbMessage, setSbMessage] = useState({ open: false, message: '', severity: 'success' });
 
@@ -23,6 +25,10 @@ function ReadingList() {
         handleFetchReadingList();
     }
 
+    const handleRedirect = (path: string) => {
+        navigate(path);
+      }
+
     return (<Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'center' }}>
         <AppSnackBar open={sbMessage.open} message={sbMessage.message} severity={sbMessage.severity as AlertProps["severity"]} />
         <Grid item xs={12} sm={12} md={8}>
@@ -36,7 +42,7 @@ function ReadingList() {
                             <Grid container spacing={2}>
                                 {
                                     readingList?.map((book, i) => (
-                                        <Grid key={i} item xs={6} md={2}>
+                                        <Grid key={i} item xs={6} sm={4} md={3}>
                                             <Card>
                                                 <CardMedia
                                                     sx={{ height: 240 }}
@@ -63,7 +69,7 @@ function ReadingList() {
                                 <Typography variant="h5" color="text.secondary">
                                     It seems like you do not have any book(s) in your reading list.
                                 </Typography>
-                                <Chip label="Search from Books" sx={{ backgroundColor: '#5ACCCC', color: 'white' }} />
+                                <Chip label="Search from Books" sx={{ backgroundColor: '#5ACCCC', color: 'white' }} onClick={() => handleRedirect('/')}/>
                             </Box>
                     }
                 </Box>
